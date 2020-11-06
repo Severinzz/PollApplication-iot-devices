@@ -62,6 +62,16 @@ export default new Vuex.Store({
       }).catch(err => {
         console.log(err)
       })
+    },
+    getVotes ({ commit }) {
+      API_SERVICE.get('polls/' + this.state.pollId + '/votes').then(res => {
+        console.log(res)
+        // commit('increaseSentYes', voteObject.numberOfYes)
+        // commit('increaseSentNo', voteObject.numberOfNo)
+        // commit('resetVotes')
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   modules: {

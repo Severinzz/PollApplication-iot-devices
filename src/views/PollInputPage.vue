@@ -66,10 +66,10 @@ export default {
       const pollId = this.pollIdInput
       const deviceId = this.deviceId
       this.setPollId(this.pollIdInput)
-      if (this.radioGroup === 'device') {
-        this.$router.push({ name: 'result', params: { deviceId: deviceId, pollId: pollId } })
+      if (this.radioGroup === 'display') {
+        this.$router.replace({ name: 'Result', params: { deviceId: deviceId, pollId: pollId } })
       } else {
-        this.$router.push({ name: 'Vote', params: { deviceId: deviceId, pollId: pollId } })
+        this.$router.replace({ name: 'Vote', params: { deviceId: deviceId, pollId: pollId } })
       }
       // this.setDeviceId(this.deviceIdInput)
       // this.$router.push()

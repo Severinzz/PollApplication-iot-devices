@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>
-      Poll {{ PollId }}
+      Poll {{ pollId }}
     </h1>
     <div class="voteContainer">
     <h1>
@@ -16,13 +16,14 @@
 
 <script>
 // @ is an alias to /src
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Result',
   methods: {
-    send () {
-    }
+    ...mapActions[{
+
+    }]
   },
   computed: {
     ...mapState({
@@ -30,6 +31,9 @@ export default {
       yesVotes: state => state.yesVotes,
       noVotes: state => state.noVotes
     })
+  },
+  created () {
+
   }
 }
 </script>
