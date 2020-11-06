@@ -16,7 +16,11 @@
         @click="submit">
         Send
       </v-btn>
-      <v-btn @click="this.resetVotes">Reset</v-btn>
+      <v-btn
+        :disabled="yesVotes < 1 && noVotes < 1"
+        @click="this.resetVotes">
+        Reset
+      </v-btn>
     </div>
   </div>
 </template>
