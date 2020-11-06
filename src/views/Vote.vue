@@ -11,7 +11,11 @@
     <div>
       <v-btn @click="vote('yesVotes')">Yes: {{ yesVotes }}</v-btn>
       <v-btn @click="vote('noVotes')">No: {{ noVotes }}</v-btn>
-      <v-btn @click="submit">Send</v-btn>
+      <v-btn
+        :disabled="yesVotes < 1 && noVotes < 1"
+        @click="submit">
+        Send
+      </v-btn>
       <v-btn @click="this.resetVotes">Reset</v-btn>
     </div>
   </div>
