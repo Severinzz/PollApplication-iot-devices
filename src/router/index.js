@@ -39,7 +39,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  // z
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

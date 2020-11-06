@@ -20,10 +20,15 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Result',
+  data () {
+    return {
+      intervalId: 0
+    }
+  },
   methods: {
-    ...mapActions[{
-
-    }]
+    ...mapActions([
+      'getVotes'
+    ])
   },
   computed: {
     ...mapState({
@@ -33,7 +38,10 @@ export default {
     })
   },
   created () {
-
+    this.intervalId = setInterval(this.getVotes, 1000)
+  },
+  destroyed () {
+    clearInterval(this.intervalId)
   }
 }
 </script>

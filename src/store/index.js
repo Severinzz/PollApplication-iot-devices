@@ -66,9 +66,7 @@ export default new Vuex.Store({
     getVotes ({ commit }) {
       API_SERVICE.get('polls/' + this.state.pollId + '/votes').then(res => {
         console.log(res)
-        // commit('increaseSentYes', voteObject.numberOfYes)
-        // commit('increaseSentNo', voteObject.numberOfNo)
-        // commit('resetVotes')
+        commit('setResult', res.data)
       }).catch(err => {
         console.log(err)
       })
