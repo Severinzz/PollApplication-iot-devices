@@ -27,7 +27,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getVotes'
+      'getVotes',
+      'subscribeToPoll'
     ])
   },
   computed: {
@@ -38,7 +39,8 @@ export default {
     })
   },
   created () {
-    this.intervalId = setInterval(this.getVotes, 1000)
+    // this.intervalId = setInterval(this.getVotes, 1000)
+    this.subscribeToPoll()
   },
   destroyed () {
     clearInterval(this.intervalId)

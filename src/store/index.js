@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { API_SERVICE } from '../common/api'
+import WEBSOCKET_SERVICE from '../common/websocket'
 
 Vue.use(Vuex)
 
@@ -70,6 +71,15 @@ export default new Vuex.Store({
       }).catch(err => {
         console.log(err)
       })
+    },
+    subscribeToPoll ({ commit }) {
+      const callback = (res) => {
+        const votes = JSON.parse(res.body)
+        commit('setResult', votes)
+      }
+      const path = 'poll/' + this.state.pollId + '/votes'
+      const deviceId = this.state.deviceId
+      WEBSOCKET_SERVICE.connect(path, callback, deviceId)
     }
   },
   modules: {
