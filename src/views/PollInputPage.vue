@@ -57,7 +57,7 @@ export default {
   name: 'PollInputPage',
   data () {
     return {
-      pollIdInput: '1679667',
+      pollIdInput: '',
       radioGroup: 'display',
       rules: [
         v => /^\d+$/.test(v) || 'Only numbers in this field!', // If not included the number field can contain + and -
