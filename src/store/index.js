@@ -12,15 +12,12 @@ export default new Vuex.Store({
     noVotes: 0,
     deviceId: 0,
     sentYes: 0,
-    sentNo: 0
+    sentNo: 0,
+    errorMessage: ''
   },
   mutations: {
     increment (state, toIncrement) {
       state[toIncrement]++
-    },
-    resetVotes (state) {
-      state.yesVotes = 0
-      state.noVotes = 0
     },
     setPollId (state, pollId) {
       state.pollId = pollId
@@ -37,6 +34,20 @@ export default new Vuex.Store({
     },
     increaseSentNo (state, sentNo) {
       state.sentNo = state.sentNo + sentNo
+    },
+    setError (state, error) {
+      state.errorMessage = error
+    },
+    clearError (state) {
+      state.errorMessage = ''
+    },
+    resetVotes (state) {
+      state.yesVotes = 0
+      state.noVotes = 0
+    },
+    clearSentVotes (state) {
+      state.sentYes = 0
+      state.sentNo = 0
     }
   },
   actions: {
@@ -46,7 +57,6 @@ export default new Vuex.Store({
     resetVotes ({ commit }) {
       commit('resetVotes')
     },
-    // TODO: CHECK IF ID EXISTS
     setDeviceId ({ commit }, deviceId) {
       commit('setDeviceId', deviceId)
     },
@@ -54,14 +64,20 @@ export default new Vuex.Store({
       commit('setPollId', pollId)
     },
     sendVotes ({ commit }, voteObject) {
-      console.log(voteObject)
       API_SERVICE.post('voting-device/' + this.state.pollId, voteObject).then(res => {
         console.log(res)
         commit('increaseSentYes', voteObject.numberOfYes)
         commit('increaseSentNo', voteObject.numberOfNo)
         commit('resetVotes')
       }).catch(err => {
-        console.log(err)
+        let error = ''
+        if (!err.response.data.includes('exception')) {
+          error = err.response.data.includes('Device') ? err.response.data + '. Device ID' + this.state.deviceId
+            : err.response.data + '. Poll ID' + this.state.pollId
+        } else {
+          error = 'Error 500 Internal server error. Please check device and poll id'
+        }
+        commit('setError', error)
       })
     },
     getVotes ({ commit }) {
@@ -77,9 +93,19 @@ export default new Vuex.Store({
         const votes = JSON.parse(res.body)
         commit('setResult', votes)
       }
+      const connectionErrorCallBack = (error) => {
+        if (error.headers) {
+          const errorMessage = error.headers.message.includes('NotAllowedDevice') ? 'This device is not allowed on ' +
+            'this poll'
+            : error.headers.message ||
+            error.headers.message.includes('PollNotFound') ? 'Poll: ' + this.state.pollId + ' was not found'
+              : error.headers.message
+          commit('setError', errorMessage)
+        }
+      }
       const path = 'poll/' + this.state.pollId + '/votes'
       const deviceId = this.state.deviceId
-      WEBSOCKET_SERVICE.connect(path, callback, deviceId)
+      WEBSOCKET_SERVICE.connect(path, callback, deviceId, this.state.pollId, connectionErrorCallBack)
     }
   },
   modules: {

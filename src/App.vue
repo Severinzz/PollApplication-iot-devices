@@ -9,40 +9,12 @@
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
 .app-container{
-  flex-direction: column;
   display: flex;
-  height: 97vh;
+  justify-content: center;
 }
-.header{
-  max-height: 112px;
-}
-.route-view{
-  flex: 1 0 auto;
-}
-.footer{
-  flex-shrink: 0;
-  margin-bottom: -1.2%;
+.route-view {
+  margin: 10vh auto auto auto;
+  width: 90vh
 }
 </style>

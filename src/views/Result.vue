@@ -1,22 +1,32 @@
 <template>
-  <div class="about">
-    <h1>
-      Poll {{ pollId }}
-    </h1>
-    <div class="voteContainer">
-    <h1>
-      Yes: {{ yesVotes }}
-    </h1>
-    <h1>
-      No: {{ noVotes }}
-    </h1>
+  <div class="results">
+    <div v-if="!error">
+      <h1>
+        Poll {{ pollId }}
+      </h1>
+      <div class="voteContainer">
+        <h1>
+          Yes: {{ yesVotes }}
+        </h1>
+        <h1>
+          No: {{ noVotes }}
+        </h1>
+      </div>
+    </div>
+
+    <div v-if="error">
+      <v-alert
+        elevation="15"
+        type="error">
+        {{ error }}
+      </v-alert>
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import { mapState, mapActions } from 'vuex'
+import WEBSOCKET_API from '../common/websocket'
 
 export default {
   name: 'Result',
@@ -35,21 +45,26 @@ export default {
     ...mapState({
       pollId: state => state.pollId,
       yesVotes: state => state.yesVotes,
-      noVotes: state => state.noVotes
+      noVotes: state => state.noVotes,
+      error: state => state.errorMessage
     })
   },
   created () {
-    // this.intervalId = setInterval(this.getVotes, 1000)
     this.subscribeToPoll()
   },
   destroyed () {
-    clearInterval(this.intervalId)
+    WEBSOCKET_API.close()
+    this.$store.commit('clearError')
+    this.$store.commit('resetVotes')
   }
 }
 </script>
 
 <style scoped>
-  .voteContainer{
+  .voteContainer {
     margin-top: 2em;
+  }
+  .results{
+    text-align: center;
   }
 </style>

@@ -7,16 +7,16 @@ let client = {}
 let initialized = false
 
 const WEBSOCKET = {
-  connect (path, callback, deviceId) {
+  connect (path, callback, deviceId, pollId, connectionErrorCallBack) {
     if (initialized === false) {
       init()
     }
-    const headers = this.setupHeader(deviceId)
+    const headers = this.setupHeader(deviceId, pollId)
     client.connect(headers, function (frame) {
       console.log(client.headers)
       client.subscribe('/topic/' + path, callback)
       client.send('/app/' + path, headers)
-    })
+    }, connectionErrorCallBack)
   },
 
   close () {
@@ -26,9 +26,10 @@ const WEBSOCKET = {
     }
   },
 
-  setupHeader (deviceId) {
+  setupHeader (deviceId, pollId) {
     return {
-      deviceId: deviceId
+      deviceId: deviceId,
+      pollId: pollId
     }
   }
 }
